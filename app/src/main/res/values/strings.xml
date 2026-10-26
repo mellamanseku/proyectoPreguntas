@@ -23,11 +23,11 @@
     <string name="imagen_pregunta">Ilustración de la pregunta</string>
     <string name="logo_descripcion">Símbolo de preguntas</string>
     <string name="resultado_descripcion">Imagen del resultado del examen</string>
-    <string name="pregunta_1">La Tierra gira alrededor del Sol.</string>
-    <string name="pregunta_2">Un triángulo tiene cuatro lados.</string>
-    <string name="pregunta_3">El agua se congela a 0 °C a presión atmosférica normal.</string>
-    <string name="pregunta_4">Canarias está en el océano Índico.</string>
-    <string name="pregunta_5">Kotlin permite crear aplicaciones Android.</string>
+    <string name="pregunta_1">El animal nacional de Escocia es el unicornio</string>
+    <string name="pregunta_2">La luz viaja antes que el sonido</string>
+    <string name="pregunta_3">El Madrid es una basura</string>
+    <string name="pregunta_4">Ceuta es la capital de Marruecos</string>
+    <string name="pregunta_5">Móviles es la mejor asignatura</string>
     <string name="aciertos">Aciertos: %1$d</string>
     <string name="fallos">Fallos: %1$d</string>
     <string name="porcentaje_aciertos">Porcentaje de aciertos: %1$.1f %%</string>

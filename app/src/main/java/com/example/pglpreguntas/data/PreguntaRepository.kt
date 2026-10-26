@@ -16,11 +16,11 @@ class PreguntaRepository(private val context: Context) {
         // Después el fichero es el almacén de TODAS las preguntas.
         if (!archivo.exists()) {
             val iniciales = listOf(
-                Pregunta(context.getString(R.string.pregunta_1), true, "tierra"),
-                Pregunta(context.getString(R.string.pregunta_2), false, "triangulo"),
-                Pregunta(context.getString(R.string.pregunta_3), true, "agua"),
-                Pregunta(context.getString(R.string.pregunta_4), false, "islas"),
-                Pregunta(context.getString(R.string.pregunta_5), true, "android_logo")
+                Pregunta(context.getString(R.string.pregunta_1), true, "logo"),
+                Pregunta(context.getString(R.string.pregunta_2), true, "logo"),
+                Pregunta(context.getString(R.string.pregunta_3), true, "logo"),
+                Pregunta(context.getString(R.string.pregunta_4), false, "logo"),
+                Pregunta(context.getString(R.string.pregunta_5), true, "logo")
             )
             FileOutputStream(archivo).bufferedWriter(Charsets.UTF_8).use { escritor ->
                 for (pregunta in iniciales) {

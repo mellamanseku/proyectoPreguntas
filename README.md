@@ -67,7 +67,7 @@ En Simple, la barra indica `(posición + 1) / número de preguntas`. Al llegar a
 En el primer acceso se escriben cinco preguntas iniciales en `filesDir/preguntas.txt`. A partir de entonces se leen desde ese fichero, incluyendo las añadidas. Formato UTF-8:
 
 ```text
-La Tierra gira alrededor del Sol.|true|tierra
+El animal nacional de Escocia es el unicornio|true|logo
 ```
 
 Los campos son enunciado, respuesta y nombre de imagen. La escritura de nuevas preguntas utiliza `FileOutputStream(archivo, true)`. Los textos nuevos deben tener de 1 a 300 caracteres y no pueden incluir `|` ni saltos de línea. Las preguntas nuevas utilizan la imagen genérica. No se necesitan permisos de almacenamiento.
