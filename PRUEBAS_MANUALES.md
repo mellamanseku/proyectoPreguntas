@@ -15,3 +15,6 @@
 13. Simple: no aparece ninguna imagen en la pantalla de juego. La barra avanza con NEXT y vuelve al inicio al completar una vuelta.
 14. Rotación: el índice, la selección y los aciertos de examen se conservan con rememberSaveable. El campo de inserción utiliza rememberTextFieldState.
 15. Pantalla pequeña: comprobar desplazamiento y acceso a botones con el teclado abierto.
+
+16. Con un fichero de prueba, comprobar que las líneas vacías no bloquean el juego. Al introducir un registro incompleto, las preguntas válidas deben conservarse y debe aparecer una copia del fichero original junto a preguntas.txt. Si el fichero está vacío, el juego debe recuperar las cinco preguntas iniciales.
+17. Si ocurre un error real de almacenamiento, comprobar que la pantalla muestra la línea Detalle y que Reintentar vuelve a intentar la carga.

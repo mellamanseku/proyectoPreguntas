@@ -82,7 +82,7 @@ Se usan Row, Column, Image, Text, Button, Modifier, estado y recomposición, ele
 
 ## Comprobaciones
 
-Consulta `VERIFICACION.md` para el resultado real y `docs/Guia_PGL.docx` para la explicación con capturas. El flujo de GitHub Actions compila y ejecuta las cinco pruebas unitarias al subir el proyecto. El informe de pruebas queda en `app/build/reports/tests/testDebugUnitTest/`.
+Consulta `VERIFICACION.md` para el resultado real y `docs/Guia_PGL.docx` para la explicación con capturas. El flujo de GitHub Actions compila y ejecuta las catorce pruebas unitarias al subir el proyecto. El informe de pruebas queda en `app/build/reports/tests/testDebugUnitTest/`.
 
 ## Subir a GitHub desde tu equipo
 
@@ -100,3 +100,9 @@ git push -u origin main
 Sustituye `URL_DEL_REPOSITORIO` por la URL real que te facilite GitHub. Android Studio también permite hacerlo desde **VCS > Share Project on GitHub**. No subas `local.properties`, carpetas de compilación ni SDKs. El `.gitignore` ya los excluye.
 
 El enunciado conserva una fecha de entrega de 2023; no se interpreta como la fecha actual del curso. Confirma la entrega vigente con el profesor.
+
+## Corrección de lectura en la versión 1.1
+
+La lectura ignora líneas vacías, admite respuestas True/False y registros antiguos sin imagen. Si encuentra registros incompletos, primero guarda una copia exacta en `preguntas.txt.copia-FECHA` y conserva todas las preguntas válidas. Si no queda ninguna, recupera las cinco iniciales. Si el acceso al almacenamiento falla, muestra el detalle del error para diagnosticarlo. Las nuevas preguntas se siguen añadiendo al final sin sobrescribir las anteriores.
+
+Se han ejecutado 14 pruebas: cinco de lógica y nueve de lectura, recuperación y escritura. El APK 1.1 (versionCode 2) puede instalarse como actualización de la versión de prueba anterior, conservando sus datos.

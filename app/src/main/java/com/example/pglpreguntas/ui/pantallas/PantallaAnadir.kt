@@ -26,11 +26,15 @@ fun PantallaAnadir(onClic: () -> Unit, onVolver: () -> Unit) {
     val texto = rememberTextFieldState()
     var respuesta by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(true) }
     var mensaje by remember { mutableStateOf(0) }
+    var detalleError by remember { mutableStateOf<String?>(null) }
     val preguntas = remember { mutableStateListOf<Pregunta>() }
     // remember ejecuta esta lectura una sola vez por entrada en la pantalla.
     remember {
         try { preguntas.addAll(repositorio.cargarPreguntas()) }
-        catch (e: IOException) { mensaje = R.string.error_datos }
+        catch (e: IOException) {
+            mensaje = R.string.error_datos
+            detalleError = e.message ?: e.javaClass.simpleName
+        }
         true
     }
     EstructuraPantalla {
@@ -59,11 +63,16 @@ fun PantallaAnadir(onClic: () -> Unit, onVolver: () -> Unit) {
                         preguntas.add(nueva)
                         texto.edit { replace(0, length, "") }
                         mensaje = 0
+                        detalleError = null
                         Toast.makeText(context, context.getString(R.string.guardada), Toast.LENGTH_SHORT).show()
-                    } catch (e: IOException) { mensaje = R.string.error_datos }
+                    } catch (e: IOException) {
+                        mensaje = R.string.error_datos
+                        detalleError = e.message ?: e.javaClass.simpleName
+                    }
                 }
             }) { Text(stringResource(R.string.guardar)) }
             if (mensaje != 0) Text(stringResource(mensaje), color = MaterialTheme.colorScheme.error)
+            if (detalleError != null) Text(stringResource(R.string.detalle_error, detalleError!!))
         }
         Text(stringResource(R.string.preguntas_guardadas), style = MaterialTheme.typography.titleMedium)
         LazyColumn(Modifier.weight(1f)) {

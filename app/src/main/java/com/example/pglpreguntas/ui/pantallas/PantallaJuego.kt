@@ -28,10 +28,10 @@ fun PantallaJuego(examen: Boolean, simple: Boolean, onRespuesta: (Boolean) -> Un
                   onClic: () -> Unit, onVolver: () -> Unit) {
     val context = LocalContext.current.applicationContext
     val repositorio = remember { PreguntaRepository(context) }
-    var error by remember { mutableStateOf(false) }
+    var detalleError by remember { mutableStateOf<String?>(null) }
     var preguntas by remember {
         mutableStateOf(try { repositorio.cargarPreguntas() } catch (e: IOException) {
-            error = true
+            detalleError = e.message ?: e.javaClass.simpleName
             emptyList<Pregunta>()
         })
     }
@@ -59,12 +59,17 @@ fun PantallaJuego(examen: Boolean, simple: Boolean, onRespuesta: (Boolean) -> Un
     EstructuraPantalla {
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(Medidas.espacio)) {
-            if (error || preguntas.isEmpty()) {
+            if (detalleError != null || preguntas.isEmpty()) {
                 Text(stringResource(R.string.error_datos))
+                if (detalleError != null) Text(stringResource(R.string.detalle_error, detalleError!!))
                 Button(onClick = {
                     if (!examen) onClic()
-                    try { preguntas = repositorio.cargarPreguntas(); error = false }
-                    catch (e: IOException) { error = true }
+                    try {
+                        preguntas = repositorio.cargarPreguntas()
+                        indice = 0; seleccionada = null; aciertosExamen = 0
+                        mostrarResultado = false; detalleError = null
+                    }
+                    catch (e: IOException) { detalleError = e.message ?: e.javaClass.simpleName }
                 }) { Text(stringResource(R.string.reintentar)) }
             } else {
                 val pregunta = preguntas[indice]

@@ -57,4 +57,5 @@
     <string name="clave_fallos">fallos</string>
     <string name="clave_clics">clics</string>
     <string name="archivo_preguntas">preguntas.txt</string>
+    <string name="detalle_error">Detalle: %1$s</string>
 </resources>

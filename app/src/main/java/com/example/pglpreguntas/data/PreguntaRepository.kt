@@ -8,51 +8,83 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
-class PreguntaRepository(private val context: Context) {
-    private val archivo = File(context.filesDir, context.getString(R.string.archivo_preguntas))
+// El constructor con File permite comprobar el almacenamiento con pruebas locales.
+class PreguntaRepository(private val archivo: File, private val iniciales: List<Pregunta>) {
+    constructor(context: Context) : this(
+        File(context.filesDir, context.getString(R.string.archivo_preguntas)),
+        listOf(
+            Pregunta(context.getString(R.string.pregunta_1), true, "logo"),
+            Pregunta(context.getString(R.string.pregunta_2), true, "logo"),
+            Pregunta(context.getString(R.string.pregunta_3), true, "logo"),
+            Pregunta(context.getString(R.string.pregunta_4), false, "logo"),
+            Pregunta(context.getString(R.string.pregunta_5), true, "logo")
+        )
+    )
 
     fun cargarPreguntas(): List<Pregunta> {
-        // Solo la primera vez creamos las cinco preguntas iniciales.
-        // Después el fichero es el almacén de TODAS las preguntas.
-        if (!archivo.exists()) {
-            val iniciales = listOf(
-                Pregunta(context.getString(R.string.pregunta_1), true, "logo"),
-                Pregunta(context.getString(R.string.pregunta_2), true, "logo"),
-                Pregunta(context.getString(R.string.pregunta_3), true, "logo"),
-                Pregunta(context.getString(R.string.pregunta_4), false, "logo"),
-                Pregunta(context.getString(R.string.pregunta_5), true, "logo")
-            )
-            FileOutputStream(archivo).bufferedWriter(Charsets.UTF_8).use { escritor ->
-                for (pregunta in iniciales) {
-                    escritor.write("${pregunta.enunciado}|${pregunta.respuesta}|${pregunta.imagen}")
-                    escritor.newLine()
-                }
-            }
-        }
+        if (!archivo.exists()) escribirPreguntas(iniciales)
         val preguntas = mutableListOf<Pregunta>()
+        var hayLineasIncorrectas = false
         FileInputStream(archivo).bufferedReader(Charsets.UTF_8).use { lector ->
             var linea = lector.readLine()
             while (linea != null) {
-                val partes = linea.split('|')
-                if (partes.size != 3 || partes[0].isBlank() ||
-                    (partes[1] != "true" && partes[1] != "false")) {
-                    throw IOException(context.getString(R.string.error_fichero))
+                // Una línea vacía no es una pregunta ni debe bloquear el juego.
+                val texto = linea.trim().removePrefix("\uFEFF")
+                if (texto.isNotBlank()) {
+                    val partes = texto.split('|')
+                    val respuesta = if (partes.size >= 2) partes[1].trim().lowercase() else ""
+                    if (partes.size !in 2..3 || partes[0].isBlank() ||
+                        (respuesta != "true" && respuesta != "false")) {
+                        hayLineasIncorrectas = true
+                    } else {
+                        // También admite registros antiguos sin imagen y True/False.
+                        val imagen = if (partes.size == 3 && partes[2].isNotBlank())
+                            partes[2].trim() else "logo"
+                        preguntas.add(Pregunta(partes[0].trim(), respuesta == "true", imagen))
+                    }
                 }
-                preguntas.add(Pregunta(partes[0], partes[1] == "true", partes[2]))
                 linea = lector.readLine()
             }
         }
-        if (preguntas.isEmpty()) throw IOException(context.getString(R.string.error_fichero))
+        if (hayLineasIncorrectas || preguntas.isEmpty()) {
+            // Primero conservamos los bytes originales. Si falla, no tocamos el fichero.
+            val copia = File(archivo.parentFile, archivo.name + ".copia-" + System.currentTimeMillis())
+            archivo.copyTo(copia)
+            // Conservamos todas las preguntas válidas que hubiera añadido el usuario.
+            if (preguntas.isEmpty()) preguntas.addAll(iniciales)
+            escribirPreguntas(preguntas)
+        }
         return preguntas
+    }
+
+    private fun escribirPreguntas(preguntas: List<Pregunta>) {
+        // Escribimos y cerramos un temporal antes de sustituir el fichero de datos.
+        val temporal = File(archivo.parentFile, archivo.name + ".tmp")
+        FileOutputStream(temporal).bufferedWriter(Charsets.UTF_8).use { escritor ->
+            for (pregunta in preguntas) {
+                escritor.write("${pregunta.enunciado}|${pregunta.respuesta}|${pregunta.imagen}")
+                escritor.newLine()
+            }
+        }
+        if (!temporal.renameTo(archivo)) {
+            throw IOException("No se ha podido actualizar " + archivo.name)
+        }
     }
 
     fun guardarPregunta(pregunta: Pregunta) {
         require(pregunta.enunciado.isNotBlank() && pregunta.enunciado.length <= 300)
         require(!pregunta.enunciado.contains('|') && !pregunta.enunciado.contains('\n') &&
             !pregunta.enunciado.contains('\r'))
-        cargarPreguntas() // Comprueba e inicializa el fichero antes de añadir.
-        // true activa append y conserva las preguntas que ya estaban guardadas.
+        cargarPreguntas()
+        // Antes de añadir, normalizamos el final de línea para no pegar dos registros.
+        val necesitaSalto = FileInputStream(archivo).use { entrada ->
+            var ultimo = -1
+            var actual = entrada.read()
+            while (actual != -1) { ultimo = actual; actual = entrada.read() }
+            ultimo != -1 && ultimo != '\n'.code && ultimo != '\r'.code
+        }
         FileOutputStream(archivo, true).bufferedWriter(Charsets.UTF_8).use { escritor ->
+            if (necesitaSalto) escritor.newLine()
             escritor.write("${pregunta.enunciado}|${pregunta.respuesta}|${pregunta.imagen}")
             escritor.newLine()
         }
