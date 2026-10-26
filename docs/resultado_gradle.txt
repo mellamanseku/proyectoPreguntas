@@ -1,0 +1,15 @@
+BUILD SUCCESSFUL in 4m 32s
+43 actionable tasks: 43 executed
+Some of the file system contents retained in the virtual file system are on file systems that Gradle doesn't support watching. The relevant state was discarded to ensure changes to these locations are properly detected. You can override this by explicitly enabling file system watching.
+
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.pglpreguntas.ReglasJuegoTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-26T14:53:58.019Z" hostname="5c65642679d1" time="0.004">
+  <properties/>
+  <testcase name="porcentajesSinIntentosSonCero" classname="com.example.pglpreguntas.ReglasJuegoTest" time="0.002"/>
+  <testcase name="resultadoDistingueLosTresTramos" classname="com.example.pglpreguntas.ReglasJuegoTest" time="0.001"/>
+  <testcase name="nextVuelveAlPrincipio" classname="com.example.pglpreguntas.ReglasJuegoTest" time="0.0"/>
+  <testcase name="prevVuelveAlFinal" classname="com.example.pglpreguntas.ReglasJuegoTest" time="0.0"/>
+  <testcase name="porcentajesUsanIntentosYNoClics" classname="com.example.pglpreguntas.ReglasJuegoTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
